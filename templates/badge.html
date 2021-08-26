@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {%block title%} {{badge.name}} - DV Thoughts{%endblock%}
+
+
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+
+            <div id="accordion"  class="mt-5"> 
+                <div class="card">
+                <div class="card-header bg-white" id="headingOne">
+                    <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <h3>Badge</h3>
+                    </button>
+                    </h5>
+                </div>
+            
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="text-center">
+                            
+                            <h1>{{badge.name}}</h1>
+                            <img src="{{ badge.medal.url }}" class="rounded-circle m-2" style="height: 100px;">
+                            <h4 class="mt-5 font-weight-light">{{badge.description}}</h4>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="card">
+                <div class="card-header bg-white" id="headingTwo">
+                    <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <h3>People who Win {{ badge.name }}</h3>
+                    </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        {% if users %}
+                        <h5 class="font-weight-light">Found {{ users_count }} users win this badge</h5> 
+                        <div class="list-group">
+            
+                          {%for user in users%}
+                          <a href="{% url 'user_profile' user.id %}" class="list-group-item list-group-item-action">
+                            
+                            
+                            {% if user.author.picture %}
+                            <img src="{{ user.author.picture.url }}"
+                            class="rounded-circle avatar" style="width: 40px;">
+                            
+                            {%else%}
+                            <img src="{% static 'images/profile.png' %}"
+                            class="rounded-circle avatar" style="width: 40px;">
+                            
+                            {% endif %}
+                            
+                            <span>{{user.username}}</span>
+            
+                          </a>
+                          {%endfor%}
+                        </div>
+            
+                        {% else %}
+                        <h1 class="font-weight-light">No people win this badge</h1> 
+                        {% endif %}
+
+                    </div>
+                </div>
+                </div>
+        </div>
+
+    {%endblock%}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

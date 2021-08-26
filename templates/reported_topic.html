@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+    {%block title%}Reported topic - {{ reported_topic }}{%endblock%}
+
+
+{%block content%}
+<div class="mt-5">
+
+    {% if reported_topic.topic.is_blocked %}
+
+    <h3 class="text-muted font-weight-light">Are you sure to Unblock {{ reported_topic.topic }} ?</h3>
+    {%else%}
+    <h3 class="text-muted font-weight-light">Are you sure to block <a href="{% url 'topic_content' reported_topic.topic.board.pk  reported_topic.topic.pk %}">{{ reported_topic.topic }}</a> ?</h3>
+    {% endif %}
+    
+    
+</div> 
+
+
+<div class="row">
+
+    <div class="col-lg-8 col-sm-12">
+        <div class="card mt-5 shadow">
+            
+            <div class="card-head">
+
+            <div class="card-body">
+
+                    <span class="d-block">description of report: <span class="text-danger">{{ reported_topic.description }}</span></span>
+                    <span class="d-block">Topic owner: <a href="{% url 'user_profile' reported_topic.user.id %}" >{{ reported_topic.user }}</a></span>
+                    <span class="d-block">Reported by: <a href="{% url 'user_profile' reported_topic.sender.id %}" >{{ reported_topic.sender }}</a></span>
+                    <span class="d-block">Report date: {{ reported_topic.date }}</small>
+                    {% if not reported_topic.topic.is_blocked %}
+                        <a href="{% url 'block_topic' reported_topic.pk %}" class="btn btn-outline-danger mt-3 w-100">Block</a>
+                    {% else %}
+                        <a href="{% url 'unblock_topic' reported_topic.pk %}" class="btn btn-outline-success mt-3 w-100">Unblock</a>
+                    {% endif %}
+                </div>
+ 
+            </div>
+        
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+    {%block title%}{{ user }} - DV Thoughts{%endblock%}
+
+
+{%block content%}
+            <div class="modal fade" id="profilepicture" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark-modal">
+                  <div class="modal-header" style="border-bottom: 0;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    {% if author.picture %}
+                    <img src="{{ author.picture.url }} " class="mx-auto d-block w-100">
+                    {%else%}
+                    <img src="{% static 'images/profile.png' %}" class="mx-auto d-block w-100">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+<div class="mt-5">
+    <div class="card shadow pb-3" >
+      {% if request.user.is_authenticated %}
+      <div class="float-right" style="position: relative;">
+        <div class="dropdown" style="display: inline-block; position:absolute; top:11px; right:33px;">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown text-dark" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class=""><i class="fas fa-ellipsis-h"></i></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                {% if request.user == user %}
+                <a class="dropdown-item dropdown-item-white" href="{% url 'settings' %}"><i class="far fa-edit"></i> Edit your profile</a> </div>
+                {%else%}
+                <a class="dropdown-item dropdown-item-white" href="{% url 'report_user' user.pk%}"><i class="far fa-flag"></i> Report</a> </div>
+                {%endif%}
+              </li>
+          </ul>
+        </div>
+     </div>
+     {% endif %}
+      
+     <div class="card-body text-center">
+        <a  type="button" class="" data-toggle="modal" data-target="#profilepicture">
+          {% if author.picture %}
+          <img src="{{ author.picture.url }} " class="rounded-circle mx-auto d-block" height="90" width="90">
+          {%else%}
+          <img src="{% static 'images/profile.png' %}" class="rounded-circle mx-auto d-block" height="90" width="90">
+          {% endif %}
+        </a>
+
+        
+        
+        <a href="{% url 'user_profile' user.pk %}" style="text-decoration: none;">
+          <div>
+            <h3 class="font-weight-light pt-2 like-hvr"  style="display: inline-block;">{{user.username}}</h3>
+            {% if user.is_superuser %} <i class="fas fa-check-circle text-primary" style="font-size: large;" title='Blog Owner'></i>{% endif %}
+
+          </div>
+
+
+        
+        </a>
+        {% if author.bio %}
+        <p>{{author.bio}}</p>
+        {% else %}
+        <p>Bio Not Founded</p>
+        {% endif %}
+
+          <div class="">
+            <p class="text-muted"><i class="fas fa-birthday-cake"></i> Joined {{ user.date_joined|naturaltime }}</p>
+          </div>
+          <div class="" style="font-size: 25px;">
+            {% if author.facebook %}
+              <a href="{{ author.facebook }}"  target="_blank"><i class="fab fa-facebook"></i></a>
+            {% endif %}
+            {% if author.github %}
+              <a href="{{ author.github }}"  target="_blank"><i class="fab fa-github"></i></a>  
+            {% endif %}
+          </div>
+      
+      </div>
+
+        
+  </div>
+</div> 
+
+
+
+<div class="row ">
+  <div class="mt-4 col-lg-4">
+
+ 
+  <div class="mt-4">
+    <div class="card shadow pb-3" >
+      <div class="card-head text-center">
+        <p>Activity on 
+          <a title="DV Thoughts" class="" style="text-decoration:none" href="{% url 'home'  %}">
+            <span style="color: rgb(240,133,255);">D</span><span style="color: rgb(213,145,255);">V</span> <span style="color: rgb(67,207,255);">Thoughts</span></p>
+          </a>
+          </div>
+
+      <div class="card-body p-2">
+        <p><i class="far fa-clipboard"></i> {{topics_count}} Topics published</p>
+        <p><i class="far fa-comment-alt"></i> {{comments_count}} Comments written</p>
+        <p><i class="fab fa-slack-hash"></i> {{tags_count}} Tags followed</p>
+
+        
+
+      </div>
+    </div>   
+  </div>
+
+
+
+
+
+  <div class="mt-4">
+    <div class="card shadow pb-3" >
+      <div class="card-head text-center">
+        <p>Education</p>
+      </div>
+      <div class="card-body p-2">
+        {% if author.education %}
+        <p>{{author.education}}</p>
+        {%elif request.user == user%}
+        <a href="{% url 'settings' %}">Add your education</a>
+        {% else %}
+        <p class="alert alert-danger m-0 text-center">No education added.</p> 
+        {% endif %}
+      </div>
+
+      <div class="card-head text-center">
+        <p>Work</p>
+      </div>
+
+      <div class="card-body p-2">
+        {% if author.work %}
+        <p>{{author.work}}</p>
+        {%elif request.user == user%}
+        <a href="{% url 'settings' %}">Add your work</a>
+        {% else %}
+        <p class="alert alert-danger m-0 text-center">No work added.</p> 
+        {% endif %}
+      </div>
+
+
+
+    </div>
+  </div>  
+
+
+
+
+
+
+
+  <div class="mt-4">
+    <div class="card shadow pb-3" >
+      <div class="card-head text-center">
+        <p>Skills Language</p>
+      </div>
+      <div class="card-body p-2">
+        {% if author.skills %}
+        <p>{{author.skills}}</p>
+        {%elif request.user == user%}
+        <a href="{% url 'settings' %}">Add your skills</a>
+        {% else %}
+        <p class="alert alert-danger m-0 text-center">No skills added.</p> 
+        {% endif %}
+      </div>
+    </div>
+  </div>  
+
+
+  <div class="mt-4">
+    <div class="card shadow pb-3 " >
+      <div class="card-head text-center">
+        <a href="{% url 'badges' %}" target="_blank">Badges</a>
+      </div>
+      <div class="card-body text-center p-2">
+          
+         
+          {% for badge in author.badge.all %}
+          <a href="{% url 'badge' badge.pk %}" style="text-decoration: none;">
+            <img src="{{ badge.medal.url }}" title="{{ badge.name }}" class="rounded-circle m-2" style="height: 50px;">
+          </a>
+          {% endfor %}
+
+
+
+      </div>
+    </div>
+  </div> 
+
+    
+    
+
+    
+     
+       
+  </div>
+  
+  
+
+
+
+
+
+
+
+
+
+
+  <div  class="col-lg-8 col-sm-12 bg-warm mt-4">
+    {% if topics %}
+    {% for topic in topics %} 
+                <!-- Modal -->
+                <div class="modal fade" id="t-{{topic.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content bg-dark-modal">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure to delete your topic ?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Deleting your topic will delete any and all content, such as comments.
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <a type="button" href="{% url 'delete_topic' topic.board.pk topic.pk %}" class="btn btn-danger">Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+    <div title="{{ topic.subject }}" class="card m-2 p-1  shadow bg-white rounded hvr-grow"  style="text-decoration: none; width: 20rem; " >
+  
+  
+      <div class="float-right">
+        <div class="dropdown" style="display: inline-block;">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown text-dark p-0" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="p-2"><i class="fas fa-ellipsis-h"></i></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                {% if topic.created_by == request.user %}
+
+                <a class="dropdown-item dropdown-item-white" href="{% url 'edit_topic' topic.board.pk topic.pk %}"><i class="fas fa-edit"></i> Edit</a>
+                <button type="button" class="dropdown-item dropdown-item-white" data-toggle="modal" data-target="#t-{{topic.pk}}">
+                  <i class="fas fa-trash"></i> Move to trash
+                </button>
+                {% else %}
+                <a class="dropdown-item dropdown-item-white" href="{% url 'report_topic' topic.board.pk topic.pk %}"><i class="far fa-flag"></i> Report</a>                       
+
+                
+                {% endif %}                         
+                      
+              </div>
+            </li>
+          </ul>
+        </div>
+     </div>
+
+     <a href="{% url 'topic_content' topic.board.pk topic.pk %}" style="text-decoration: none;">
+              
+              {% if topic.topic_picture %}
+                <img src="{{ topic.topic_picture.url }}" class="card-img-top" >
+              {% endif %}
+              <div  class="card-body p-0">
+  
+                <span class="font-weight-bold text-primary over">{{ topic.subject }}</span>
+                <small class="text-muted d-block">Created by:
+                  {% if topic.created_by.author.picture %}
+                  <img src="{{ topic.created_by.author.picture.url }}"
+                  class="rounded-circle" width="25" height="25">
+                  
+                  {%else%}
+                  <img src="{% static 'images/profile.png' %}"
+                  class="rounded-circle" width="25" height="25">
+                  
+                  {% endif %}
+                  <a href="{% url 'user_profile' topic.created_by.id %}">{{ topic.created_by }}</a>
+                
+                </small>
+                <small class="text-muted d-block">Posts: {{ topic.replies }}</small>
+                <small class="text-muted d-block">Views: <i class="far fa-eye"></i> {{ topic.views }}</small>
+                <small class="text-muted d-block">Created date: <i class="fas fa-globe-americas"></i> {{ topic.created_date }}</small>
+              </div>  
+            </a>
+                <small class="text-muted d-block">
+                {% for tag in topic.tags.all %}
+                <a  href="{% url 'filter_topics' topic.board.pk tag.pk %}" class="mr-1 mt-1 p-1 badge badge-primary ">{{ tag }}</a>
+                {% endfor %}
+                </small>          
+        </div>
+    {% endfor %}
+    {% else %}
+
+          <p class="text-center alert alert-danger mt-4">No Topics Founded.</p>        
+
+    {% endif %}
+    </div>
+  
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

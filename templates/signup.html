@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sgin Up - DV Thoughts
+{% endblock %}
+
+{% block back %}
+
+
+{% endblock %}
+
+{% block content %}
+
+  {% block body %}
+
+  {% endblock %}  
+
+    <div class="row" >
+
+      
+
+
+
+
+            
+      <div class="col-lg-6 col-sm-12 signup dark-white shadow p-3 mb-5 bg-white rounded animate__animated animate__fadeInLeft"> 
+        <h3 class="font-weight-light ">Registration</h3>
+        <hr>
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          {% include 'includes/form.html' %}
+          <button type="submit" class="btn btn-primary">Sign up</button>
+
+          <div class="text-center">
+            <hr class="mb-1">
+            <small class="text-muted">Do you have an account ? </small>
+            <a class="btn btn-outline-success w-100 mt-3" href="{% url 'login' %}">Log In</a>
+          </div>
+        </form>
+      </div>
+  
+
+
+
+{% endblock %}

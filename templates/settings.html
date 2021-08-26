@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+
+{% load static %}
+
+    {%block title%}Settings - DV Thoughts{%endblock%}
+    {% block back %}
+
+    {% endblock %}
+
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+ 
+    <div class="mt-5">
+          <h1>Settings for <a href="{% url 'user_profile' request.user.id %}" style="text-decoration:none;">@{{user.username}}</a></h1>
+          {% if  request.user.author.uploaded_date %}
+            <p class="text-muted mt-2 mb-0">Last update {{ request.user.author.uploaded_date|naturaltime }}</p>
+          {% endif %}
+          <p class="text-success">last successful login {{ request.user.last_login|naturaltime }}</p>
+
+      </div>     
+  
+
+
+    <div class="row mt-5">
+      <div class="col-lg-4 col-sm-12 pb-3" >
+
+        <div class="card shadow">
+          <div class="card-body">
+              <div>
+                {% if request.user.author.picture %}
+                <img src="{{ request.user.author.picture.url }} " class="rounded-circle mx-auto d-block" width="250" height="250">
+                {%else%}
+                <img src="{% static 'images/profile.png' %}" class="rounded-circle mx-auto d-block" width="250" height="250">
+                {% endif %}
+                {% if prog != 100 %}
+
+                  <a  id='example' class="shadow" data-toggle="popover" data-placement='bottom' data-content='Please, Complete your profile.'>
+                    <div class="progress mt-3">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: {{prog}}%;" aria-valuenow="{{prog}}" aria-valuemin="0" aria-valuemax="100">{{prog}}%</div>
+                    </div>
+                  </a>
+
+                {% else %}
+                <div class="progress mt-3">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: {{prog}}%;" aria-valuenow="{{prog}}" aria-valuemin="0" aria-valuemax="100">{{prog}}%</div>
+                </div>
+                {% endif %}
+
+                
+              </div>
+          </div>
+        </div>
+      </div>
+
+        <div class="col-lg-6 col-sm-12">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+          
+            <div class="card shadow">
+              <div class="card-body">
+                <h4 class="mb-4 ">User</h4>
+                {% include 'includes/form2.html' %}
+                <div>
+                  <a href="{% url 'change_password' %}">Set New Password</a>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="card mt-4 shadow">
+              <div class="card-body">
+                <h4 class="mb-4">Basic</h4>
+                {% include 'includes/form.html' %}
+              </div>
+            </div>
+              
+            <div class="card mt-3 shadow">
+              <div class="card-body">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Save Profile Information</button>
+              </div>
+            </div>
+          </form> 
+
+          <div class="card mt-3 shadow">
+            <div class="card-body">
+              <h2 class="text-danger">Danger Zone</h2>
+              <h5>Delete account</h5>
+              <p class="font-weight-light">Deleting your account will:</p>
+              <p class="font-weight-light">Delete any and all content you have, such as articles and comments.
+                Allow your username to become available to anyone.</p>
+
+
+
+                  <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteaccount">
+                    Delete Account
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content bg-dark-modal">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Are you sure to delete your account ?</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          Deleting your account is permanent and will remove all content including comments, avatars and profile settings. Are you sure you want to delete your account ?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <a  class="btn btn-danger"  href="{% url 'delete_user'%}">Delete</a>  
+                        </div>
+                      </div>
+                    </div>
+                  </div>  
+
+
+
+              </div>
+          </div>    
+
+
+      </div>
+    </div>
+    <script>
+      $(function() { 
+        $("#example").popover('show');
+      });
+    </script>
+    {%endblock%}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {%block title%}{{ board.name }} - DV Thoughts{%endblock%}
+<body>
+  {% block body %}
+
+
+
+  <ol class="breadcrumb my-4 shadow p-3 mb-2 bg-white rounded animate__animated animate__flash">
+  {%block breadcrumb%}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Boards</a></li>
+  <li class="breadcrumb-item active">{{ board.name }}</li>
+  </ol>
+  <div class="text-center mb-2">
+  {% if tag not in common_tags %}
+    <a href="{% url 'board_topics' board.pk %}" class="btn btn-primary bdge m-1 shadow">All</a>
+  {% else %}
+    <a href="{% url 'board_topics' board.pk %}" class="btn btn-outline-primary bdge m-1 shadow">All</a>
+  {% endif %}
+  
+  {% for mt in common_tags %}
+  {% if mt == tag %}
+  <a href="{% url 'filter_topics' board.pk mt.pk %}" class="btn btn-primary bdge m-1 shadow">{{mt}}</a>
+  {%else%}
+  <a href="{% url 'filter_topics' board.pk mt.pk %}" class="btn btn-outline-primary bdge m-1 shadow">{{mt}}</a>
+  {%endif%}
+  {% endfor %}
+  
+
+</div>
+  {%endblock%}
+
+  {% endblock %}
+
+    {%block content%}   
+    <div  class="row bg-warm mt-4 justify-content-center">
+      {% if topics %}
+      {% for topic in topics %} 
+            <!-- Modal -->
+      <div class="modal fade" id="t-{{topic.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content bg-dark-modal">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Are you sure to delete your topic ?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Deleting your topic will delete any and all content, such as comments.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <a type="button" href="{% url 'delete_topic' topic.board.pk topic.pk %}" class="btn btn-danger">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+
+      <div title="{{ topic.subject }}" class="col-lg-3 col-md-5 col-sm-11 card m-2 p-1  shadow bg-white rounded hvr-grow"  style="text-decoration: none; width: 20rem; " >
+
+
+        {% if request.user.is_authenticated %}
+
+        <div class="float-right">
+          <div class="dropdown" style="display: inline-block;">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown text-dark p-0" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="p-2"><i class="fas fa-ellipsis-h"></i></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                  {% if topic.created_by == request.user %}
+
+                  <a class="dropdown-item dropdown-item-white" href="{% url 'edit_topic' topic.board.pk topic.pk %}"><i class="far fa-edit"></i> Edit</a>                       
+                  <button type="button" class="dropdown-item dropdown-item-white" data-toggle="modal" data-target="#t-{{topic.pk}}">
+                    <i class="fas fa-trash"></i> Move to trash
+                  </button>
+                  {% else %}
+                
+                  <a class="dropdown-item dropdown-item-white" href="{% url 'report_topic' topic.board.pk topic.pk %}"><i class="far fa-flag"></i> Report</a>                       
+
+                  
+                  {% endif %}     
+                </div>
+              </li>
+            </ul>
+          </div>
+       </div>
+       {% endif %}
+
+           
+
+
+
+              
+
+
+
+        
+        <a href="{% url 'topic_content' board.pk topic.pk %}" style="text-decoration: none;">
+                
+                {% if topic.topic_picture %}
+                  <img src="{{ topic.topic_picture.url }}" title="{{ topic.subject }}" class="card-img-top" >
+                {% endif %}
+                <div  class="card-body p-0">
+
+                  <span class="font-weight-bold text-primary over">{{ topic.subject }}</span>
+                  <small class="text-muted d-block">Created by:
+                    {% if topic.created_by.author.picture %}
+                    <img src="{{ topic.created_by.author.picture.url }}"
+                    class="rounded-circle" width="25" height="25">
+                    
+                    {%else%}
+                    <img src="{% static 'images/profile.png' %}"
+                    class="rounded-circle"  width="25" height="25">
+                    
+                    {% endif %}
+                    <a href="{% url 'user_profile' topic.created_by.id %}">{{ topic.created_by }}</a>
+                    
+                  
+                  </small>
+                  <small class="text-muted d-block">Comments: {{ topic.replies }}</small>
+                  <small class="text-muted d-block">Views: <i class="far fa-eye"></i> {{ topic.views }}</small>
+                  <small class="text-muted d-block">Created date: <i class="fas fa-globe-americas"></i> {{ topic.created_date }}</small>
+                </div>  
+              </a>
+                  <small class="text-muted d-block">
+                  {% for tag in topic.tags.all %}
+                  <a  href="{% url 'filter_topics' board.pk tag.pk %}" class="mr-1 mt-1 p-1 badge badge-primary ">{{ tag }}</a>
+                  {% endfor %}
+                  </small>
+
+          </div>
+
+
+      {% endfor %}
+      {% else %}
+      <div class="card shadow bg-white rounded font-weight-light mt-5" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">No Topics Founded</h5>
+          <h6 class="card-card-text mb-2 text-muted">Be the first to add <a href="{% url 'new_topic' %}">new topic!</a></h6>
+        </div>
+      </div>
+      {% endif %}
+  </div>      
+{% if not request.user.is_authenticated %}
+<div class="alert alert-warning mt-5" role="alert">
+  <a class="btn btn-outline-success " href="{% url 'signup' %}">Sign Up</a>
+  <span> to add new topics on DV Thoughts. Already have an account? <a href="{% url 'login' %}">Sign in to add</a></span>    
+</div>
+{% endif %}
+
+{% if request.user.is_superuser %}
+<div class="alert alert-warning mt-5" role="alert">
+  <span>You Logged as SuperUser click to view <a href="{% url 'reported_topics' %}" class="btn btn-outline-warning">reported topics</a></span>    
+</div>
+{% endif %}
+
+<nav aria-label="..." class="text-center" style="margin-top: 60px;">
+  <ul class="pagination justify-content-center">
+    {% if topics.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{topics.previous_page_number}}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>
+    {% endif %}
+    {% for page_num in topics.paginator.page_range %}
+      {% if topics.number == page_num %}
+        <li class="page-item active">
+          <a class="page-link" href="?page={{page_num}}">{{page_num}}</a><span class="sr-only">(current)</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_num}}">{{page_num}}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+    {% if topics.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{topics.next_page_number}}">Next</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Next</span>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+
+
+
+{%endblock%}
+
+</body>
+</html>

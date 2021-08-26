@@ -1,0 +1,192 @@
+
+body{
+    background-color: rgb(238, 240, 241, 40%) !important;
+}
+
+.over {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display:inline-block;
+    margin:0;
+    width:200px
+  }
+
+.signup{
+    background-color: #FFF;
+    margin-top: 55px;
+    border-radius: 7px;
+    padding: 30px 20px;
+    
+} 
+.new-topic{
+    background-color: #FFF;
+    margin-top: 55px;
+    border-radius: 7px;
+    padding: 30px 20px;
+}   
+.signup h3{
+    margin-bottom:30px;
+    color:rgba(0,0,0,.65);
+}
+.intro{
+    width:45%;
+    margin-top: 80px;
+}
+.background{
+   background-color: #1d1f21 !important
+}
+.light-background{
+   background-color: #1d1f21 !important
+
+}
+
+.dark-white{
+    color:rgba(0,0,0,.65);
+
+}
+.anchor{
+    text-decoration: none;
+}
+.toggle{
+    visibility: hidden;
+}
+footer{
+    background-color: #1d1f21 !important;
+    height: 170px;
+    margin-top: 100px;
+
+}
+.center-page {
+    padding-top:50px;
+    padding-bottom: 50px;
+}
+
+#container {
+    width: 100px;
+    height: 100px;
+    position: relative;
+  }
+  #navi,
+  #infoi {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  #infoi {
+    z-index: 10;
+  }
+  .bootstrap-tagsinput{
+    width: 100%;
+    }
+
+
+.container .images img{
+    width: 100% !important;
+}
+.container .images a img{
+    width: 100% !important;
+  }
+  .container .images p img{
+    width: 100% !important;
+  }
+
+
+  .user-profile-btn{
+    margin: 0 11px;
+    border-radius: 15px;
+  }
+
+  
+
+.bdge {
+    border-radius: 15px;
+    font-size: 11px;
+}
+  
+.like-hvr:hover{
+    color:#007bff;
+  }  
+
+.notification{
+    background-color: red;
+    font-size: 56%;
+    border-radius: 1.25rem;
+    position: absolute;
+    top: -4px;
+    right: -7px;
+}
+
+.general-icon{
+    font-size: 19px;
+}
+.trans{
+    background-color: transparent !important;
+}
+
+.light-icon:hover{
+    color:#e1e1e1;
+
+}
+
+ 
+.dropdown-menu::-webkit-scrollbar {
+    width: 0px !important;
+  }
+
+.un_seen_light{
+    background-color: #cfcfcfb0;
+}
+#button {
+  display: inline-block;
+  background-color: rgb(240,133,255);;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  border-radius: 4px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: background-color .3s, 
+    opacity .5s, visibility .5s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000;
+}
+#button::after {
+
+  font-weight: normal;
+  font-style: normal;
+  font-size: 2em;
+  line-height: 50px;
+  color: #fff;
+}
+#button:hover {
+  cursor: pointer;
+  background-color: #333;
+}
+#button:active {
+  background-color: #555;
+}
+#button.show {
+  opacity: 1;
+  visibility: visible;
+}
+.over-more {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display:inline-block;
+  margin:0;
+  width:140px
+}
+.modal-dialog-x {
+  max-width: 800px !important;
+}
+.popover{
+  top: -15px !important;
+  left: -86px !important;
+  
+}

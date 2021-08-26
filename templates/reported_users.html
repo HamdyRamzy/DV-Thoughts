@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+    {%block title%}Reported users - DV Thoughts{%endblock%}
+
+
+{%block content%}
+<div class="mt-5">
+    <h3 class="text-muted font-weight-light">Manage <span class="text-danger">reported users ({{ reported_users_count }}) </span> by superuser<a href="{% url 'user_profile' request.user.id %}" style="text-decoration:none;"> @{{request.user.username}}</a></h3>
+
+
+</div>
+
+
+
+
+<div class="row justify-content-center">
+    
+
+{% for reported_user in reported_users %}
+            <!-- Modal -->
+            <div class="modal fade" id="user-{{reported_user.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content bg-dark-modal">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Are you sure to delete {{reported_user.user.username}} ?</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="font-weight-light">Deleting this account will:</p>
+                        <p class="font-weight-light">Delete any and all content who have, such as articles and comments.
+                            Allow his username to become available to anyone.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <a href="{% url 'block_user' reported_user.user.pk %}" class="btn btn-danger">Delete</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+    <div class="col-sm-11 col-md-4 col-lg-3 p-1 card shadow bg-white rounded hvr-grow" style="text-decoration: none;  width: 20rem; margin:20px">
+
+
+
+            <div class="card-head">
+
+        
+            </div>
+            <div class="card-body">
+                <span class="d-block"><span class="text-danger">Reported description</span> {{ reported_user.description }}</span>
+                <span class="d-block"><span class="text-danger">Reported to</span> <a href="{% url 'user_profile' reported_user.user.pk %}"> {{ reported_user.user }}</a> </span>
+                <span class="d-block"><span class="text-danger">Reported by</span> <a href="{% url 'user_profile' reported_user.sender.pk %}"> {{ reported_user.sender }}</a></span>                
+                <button type="button" class="btn btn-outline-danger mt-4 w-100" data-toggle="modal" data-target="#user-{{reported_user.pk}}">
+                   Delete User
+                </button>
+            </div>
+        
+    </div>
+
+
+
+{% endfor %}
+
+
+</div>
+
+
+
+<nav aria-label="..." class="text-center" style="margin-top: 60px;">
+    <ul class="pagination justify-content-center">
+      {% if reported_users.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{reported_users.previous_page_number}}">Previous</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Previous</span>
+        </li>
+      {% endif %}
+      {% for page_num in reported_users.paginator.page_range %}
+        {% if reported_users.number == page_num %}
+          <li class="page-item active">
+            <a class="page-link" href="?page={{page_num}}">{{page_num}}</a><span class="sr-only">(current)</span>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{page_num}}">{{page_num}}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      {% if reported_users.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{reported_users.next_page_number}}">Next</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Next</span>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+    {%block title%}New Topic - DV Thoughts{%endblock%}
+    {% block back %}
+    {% endblock %}
+
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+    
+    <div class="row">
+      <div class="col-lg-10 col-sm-12 new-topic dark-white shadow p-3 mb-5 bg-white rounded">
+        <h3 class="font-weight-light ">Add New Topic on       <a href="{% url 'home' %}"><span style="color: rgb(240,133,255);">D</span><span style="color: rgb(213,145,255);">V</span> <span style="color: rgb(67,207,255);">Thoughts</span></a>
+        </h3>
+        <br>
+        <form method="POST"  enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {% include 'includes/form.html' %}
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+
+      
+    
+    </div>
+
+
+    {%endblock%}
+
+</html>

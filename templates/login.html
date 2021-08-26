@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Log In - DV Thoughts
+{% endblock %}
+
+{% block back %}
+
+{% endblock %}
+
+{% block content %}
+
+{% block body %}
+
+{% endblock %}
+
+    <div class="row">
+    
+      <div class="col-lg-6 col-sm-12 signup dark-white shadow p-3 mb-5 rounded animate__animated animate__fadeInLeft">
+        <h3 class="font-weight-light ">Log In</h3>
+        <hr>
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          {% include 'includes/form.html' %}
+          <button type="submit" class="btn btn-primary">Log In</button>
+
+          <div class="text-center">
+            <hr class="mb-1">
+            <small class="text-muted">You don't have an account ? </small>
+            <a class="btn btn-outline-success mt-3 w-100" href="{% url 'signup' %}">Sign Up</a>
+          </div>
+        </form>
+      </div>
+    
+    </div>
+
+
+
+
+{% endblock %}

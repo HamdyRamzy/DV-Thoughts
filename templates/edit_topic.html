@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+
+{% load static %}
+
+    {%block title%}Edit Topic - DV Thoughts{%endblock%}
+    {% block back %}
+
+    {% endblock %}
+
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+ 
+    <div class="mt-5">
+        <h3 class="font-weight-light">Edit Topic <a href="{% url 'topic_content' board.pk topic.pk %}" style="text-decoration:none;"> {{topic.subject}}</a></h3>
+      </div>
+
+   <div class="row">
+    <div class="col-lg-10 col-sm-12 new-topic dark-white  shadow p-3">
+      <form method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+      
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4 font-weight-light">Edit Topic</h4>
+            <hr>
+            {% include 'includes/form.html' %}
+          </div>
+        </div>              
+        <div class="card mt-3">
+          <div class="card-body">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Save</button>
+          </div>
+        </div>
+      </form> 
+  </div>
+
+
+   </div>     
+
+
+
+
+    {%endblock%}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

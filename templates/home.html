@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {%block title%}DV Thoughts{%endblock%}
+    {% block back %}
+
+
+
+
+
+{% endblock %}
+
+<body>
+  {% block body %}
+    <ol class="breadcrumb my-4 shadow p-3 mb-5 bg-white rounded animate__animated animate__flash">
+    {%block breadcrumb%}
+    <li class="breadcrumb-item active">Boards</li>
+    {%endblock%}
+  </ol> 
+  {% endblock %}  
+    {%block content%}
+    <div  class="row bg-warm justify-content-center">
+      {% for board in boards %}
+      <!-- Modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="b-{{board.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure to delete {{board.name}} ?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Deleting your board will delete any and all content in {{board.name}} , such as topics and comments.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a type="button" href="{% url 'delete_board' board.pk %}" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      <div class="col-sm-11 col-md-4 col-lg-3 p-1 card shadow bg-white rounded hvr-grow" style="text-decoration: none;  width: 20rem; margin:20px">
+          
+        
+        {% if request.user.is_superuser %}
+        <div class="float-right">
+          <div class="dropdown" style="display: inline-block;">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown text-dark p-0" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="p-2"><i class="fas fa-ellipsis-h"></i></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                  <a class="dropdown-item dropdown-item-white " href="{% url 'edit_board' board.pk %}"><i class="fas fa-edit"></i> Edit</a>                         
+                  <!-- Button trigger modal -->
+                  <button type="button" class="dropdown-item dropdown-item-white" data-toggle="modal" data-target="#b-{{board.pk}}">
+                    <i class="fas fa-trash"></i> Move to trash
+                  </button>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+       </div>
+       {% endif %}   
+        
+        
+        <a href="{% url 'board_topics' board.pk %}" style="text-decoration: none;">                  
+                <div>
+                    {% if board.picture %}
+                    <img src="{{ board.picture.url }}" title="{{ board.name }}" class="card-img-top" >
+                    {% endif %}
+                  <div  class="card-body p-0">
+                      <span class="font-weight-bold text-primary">{{ board.name }}</span> 
+                      <small class="text-muted d-block">{{ board.description }}</small>
+                      <hr>
+                      <small class="text-muted d-block">Topics: {{ board.topics.count }}</small>
+                      <small class="text-muted d-block">Comments: {{ board.get_posts_count }}</small>
+                      {% with post=board.get_last_post %}
+                      {% if post %}
+                      <small class="text-muted d-block over">Last topic: <i class="fas fa-globe-americas"></i> {{post.created_date}}</small>
+                      {% else %}
+                      <small class="text-muted d-block">No topics found </small>
+                      {% endif %}
+                      {%endwith%}
+                  </div>
+                </div>
+          </a>
+        
+        </div>
+      {% endfor %}
+
+    
+    </div>
+            
+
+
+
+
+
+
+              
+  {% if request.user.is_superuser %}
+  <div class="alert alert-warning mt-5" role="alert">
+    <span>You Logged as SuperUser click to create <a href="{% url 'add_board' %}" class="btn btn-outline-success">New Board</a></span>    
+  </div>
+  {% endif %}
+
+
+
+
+  
+    {% endblock %}
+</body>
+</html>

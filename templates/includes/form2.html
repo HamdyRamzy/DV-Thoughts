@@ -1,0 +1,29 @@
+{% load widget_tweaks %}
+
+
+
+
+{% for field in form2 %}
+  <div class="form-group">
+      <span class="dark-label">{{field.label_tag}}</span>
+    <!-- if input submited -->
+    {% if form2.is_bound %}
+        <!-- if input not valid after submit -->
+        {% if field.errors %}
+          {% render_field field class="form-control is-invalid" %}
+          {% for error in field.errors %}
+            <div class="invalid-feedback">
+              {{ error }}
+            </div>
+          {% endfor %}
+        <!-- if input valid after submit -->
+          {% else %}
+          {% render_field field class="form-control is-valid" %}
+        {% endif %}
+    <!-- render the inputs before submit -->
+    {% else %}
+        {% render_field field class="form-control" placeholder=field.label%}
+    {% endif %}
+
+  </div>
+{% endfor %}

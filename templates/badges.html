@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {%block title%}Badges - DV Thoughts{%endblock%}
+
+
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+    
+        {%for badge in badges %}
+                    <!-- Modal -->
+                    <div class="modal fade" id="b-{{badge.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content bg-dark-modal">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Are you sure to delete {{badge.name}} ?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Deleting this will delete it from all users.
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a type="button" href="{% url 'delete_badge' badge.pk %}" class="btn btn-danger">Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>              
+        <div class="card shadow pb-3 mt-5" >
+
+            {% if request.user.is_superuser %}
+            <div>
+              <div class="dropdown" style="display: inline-block; font-size:25px;">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown text-dark p-0" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="p-2"><i class="fas fa-ellipsis-h"></i></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                      <a class="dropdown-item dropdown-item-white" href="{% url 'edit_badge' badge.pk %}"><i class="fas fa-edit"></i> Edit</a>
+                      <button type="button" class="dropdown-item dropdown-item-white" data-toggle="modal" data-target="#b-{{badge.pk}}">
+                        <i class="fas fa-trash"></i> Move to trash
+                      </button>
+
+                    </div>
+                  </li>
+                </ul>
+              </div>
+           </div>
+           {% endif %}   
+
+
+            <div class="card-head text-center">
+                <h1 class=" font-weight-light">{{badge.name}}</h1>
+            </div>
+            <div class="card-body text-center">
+                <img src="{{ badge.medal.url }}" class="rounded-circle m-2" style="height: 100px;">
+                <h4 class="mt-5 font-weight-light">{{badge.description}}</h4>
+            </div>
+          </div>
+           
+        {%endfor%}
+
+        {% if request.user.is_superuser %}
+        <div class="alert alert-warning mt-5" role="alert">
+          <span>You Logged as SuperUser click to create <a href="{% url 'add_badge' %}" class="btn btn-outline-success">New Badge</a></span>    
+        </div>
+        {% endif %}
+    
+    {%endblock%}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

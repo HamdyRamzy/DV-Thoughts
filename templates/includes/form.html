@@ -1,0 +1,53 @@
+{% load widget_tweaks %}
+
+
+{% if form.non_field_errors%}
+  <div class="alert alert-danger" role="alerts">
+    {%for error in form.non_field_errors%}
+      <p {%if forloop.last%} class="m-0" {%endif%}>{{error}}</p>
+    {%endfor%}
+  </div>
+{%endif%}
+
+{% for field in form %}
+  <div class="form-group">
+      <span class="dark-label">{{field.label_tag}}</span>
+    <!-- if input submited -->
+    {% if form.is_bound %}
+        <!-- if input not valid after submit -->
+        {% if field.errors %}
+          {% render_field field class="form-control is-invalid" %}
+          {% for error in field.errors %}
+            <div class="invalid-feedback">
+              {{ error }}
+            </div>
+          {% endfor %}
+        <!-- if input valid after submit -->
+          {% else %}
+          {% render_field field class="form-control is-valid" %}
+        {% endif %}
+    <!-- render the inputs before submit -->
+    {% else %}
+        {% render_field field class="form-control" placeholder=field.label%}
+    {% endif %}
+
+  </div>
+{% endfor %}
+
+
+
+
+
+
+
+
+{% if form2.non_field_errors%}
+  <div class="alert alert-danger" role="alerts">
+    {%for error in form2.non_field_errors%}
+      <p {%if forloop.last%} class="m-0" {%endif%}>{{error}}</p>
+    {%endfor%}
+  </div>
+{%endif%}
+
+
+

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+
+{% load static %}
+
+    {%block title%}{{post.message}} - DV Thoughts{%endblock%}
+    {% block back %}
+
+    {% endblock %}
+
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+ 
+
+        <div class="col-lg-10 col-sm-12">
+          <form method="POST" style="overflow: auto;" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+          
+            <div class="card mt-5">
+              <div class="card-body">
+                <h4 class="mb-4 ">Edit comment</h4>
+                {% include 'includes/form.html' %}
+              </div>
+            </div>              
+            <div class="card mt-3">
+              <div class="card-body">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Save</button>
+              </div>
+            </div>
+          </form> 
+      </div>
+    </div>
+
+
+
+    {%endblock%}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

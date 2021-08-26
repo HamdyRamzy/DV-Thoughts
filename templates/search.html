@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+    {%block title%}Search - DV  Thoughts{%endblock%}
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+    <div class="row">
+
+        <div  class=" card col-lg-8 col-sm-12 shadow p-3 mb-5 mt-5 animate__animated animate__fadeInLeft">
+          <h3 class="font-weight-light" style="font-size: 55px">Search on <span style="font-weight: bolder;"><span class="text-info">G</span><span class="text-danger">o</span><span class="text-warning">o</span ><span  class="text-info">g</span><span class="text-success">l</span><span class="text-danger">e</span></span></h3>
+          <hr>
+          <form   action="https://www.google.com/search" method="get">
+              <label class="form-group"></label>
+              <input class="form-control mr-sm-2" name="q" type="search" autofocus autocomplete="off">
+              <input class="btn btn-outline-primary form-control" style="margin-top: 20px;" type="submit" value="Search" formtarget="_blank">
+          </form>
+      
+  
+        </div>  
+  
+      
+    </div>
+
+
+    {%endblock%}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+    {%block title%}Reported topics - DV Thoughts{%endblock%}
+
+
+{%block content%}
+<div class="mt-5">
+    <h3 class="text-muted font-weight-light">Manage <span class="text-danger">reported topics ({{ reported_topics_count }}) </span> by superuser<a href="{% url 'user_profile' request.user.id %}" style="text-decoration:none;"> @{{request.user.username}}</a></h3>
+
+    <div class="">
+        <div class="dropdown" style="display: inline-block;">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link text-white dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-muted font-weight-light" style="font-size: larger;"><i class="fas fa-filter"></i> Filter By</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                <a href="{% url 'reported_topics' %}" class="dropdown-item dropdown-item-white">All</a>
+                <a href="{% url 'seen_reported_topics' %}" class="dropdown-item dropdown-item-white">Checked Topics ({{checked_reported_topics}})</a>
+                <a href="{% url 'unseen_reported_topics' %}" class="dropdown-item dropdown-item-white">UnChecked Topics ({{unchecked_reported_topics}})</a>                         
+              </div>
+            </li>
+          </ul>
+        </div>
+     </div>
+
+</div>
+
+
+
+
+<div class="row justify-content-center">
+    
+
+{% for reported_topic in reported_topics %}
+
+
+    <div class="col-sm-11 col-md-4 col-lg-3 p-1 card shadow bg-white rounded hvr-grow" style="text-decoration: none;  width: 20rem; margin:20px">
+
+
+
+        <div class="float-right">
+            <div class="dropdown" style="display: inline-block;">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown text-dark p-0" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="p-2"><i class="fas fa-ellipsis-h"></i></span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                    <a class="dropdown-item dropdown-item-white " href="{% url 'reported_topic' reported_topic.pk %}">Action and details</a>                         
+                  </div>
+                </li>
+              </ul>
+            </div>
+         </div>
+            
+
+            <div class="card-head">
+                {% if reported_topic.topic.topic_picture %}
+                <img src="{{ reported_topic.topic.topic_picture.url }}" title="{{ board.name }}" class="card-img-top" >
+                {% endif %}
+        
+        
+            </div>
+            <div class="card-body">
+                {% if not reported_topic.topic.is_blocked %}
+
+                <small><span class="text-danger">Reported topic</span> <a href="{% url 'topic_content' reported_topic.topic.board.pk  reported_topic.topic.pk %}">{{ reported_topic.topic }}</a></small>
+                {%else%}
+                <small><span class="text-danger">Reported topic</span> {{ reported_topic.topic }}</small>
+                {% endif %}
+                <div style="display: block;">
+                    <small class="d-block">Report type <span class="text-danger">{{ reported_topic.report_type }}</span></small>
+                    {% if reported_topic.topic.is_blocked %}
+
+                    <img src="{% static 'images/warning.png' %}" title="Blocked" class="fas fa-thumbs-up text-primary" style=" width: 29%;
+                    position: absolute;
+                    left: 7px;
+                    top: 6px;" >
+                    <small class="text-danger d-block">Blocked! It is not availble right now.</small>
+                    {% endif %}
+
+                    {% if reported_topic.is_seen %}
+                    <small class="text-success d-block">Checked by admin</small>
+                    {% else %}
+                    <small class="text-danger d-block">Unchecked</small>
+                    {% endif %}
+  
+                </div>
+ 
+            </div>
+        
+    </div>
+
+
+
+{% endfor %}
+
+
+</div>
+
+
+
+<nav aria-label="..." class="text-center" style="margin-top: 60px;">
+    <ul class="pagination justify-content-center">
+      {% if reported_topics.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{reported_topics.previous_page_number}}">Previous</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Previous</span>
+        </li>
+      {% endif %}
+      {% for page_num in reported_topics.paginator.page_range %}
+        {% if reported_topics.number == page_num %}
+          <li class="page-item active">
+            <a class="page-link" href="?page={{page_num}}">{{page_num}}</a><span class="sr-only">(current)</span>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{page_num}}">{{page_num}}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      {% if reported_topics.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{reported_topics.next_page_number}}">Next</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Next</span>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endblock %}

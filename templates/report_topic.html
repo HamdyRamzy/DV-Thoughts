@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+
+{% load static %}
+
+    {%block title%}Report topic - {{ topic.subject }}{%endblock%}
+    {% block back %}
+
+    {% endblock %}
+
+    {% block body %}
+
+    {% endblock %}
+    
+    {%block content%}
+    {% if topic_reported %}
+    <div class="text-center mt-5">
+      <h1 class="text-success font-weight-light">You already reported this topic and it will checked soon.</h1>
+      <img  src="{% static 'images/checked.png' %}" style="width:25%" class="mt-5">
+
+    </div>
+
+ 
+    {%else%}
+  
+        <div class="mt-5">
+            <h3 class="text-muted font-weight-light">Help us understand the problem. What issue with <a href="{% url 'topic_content' board.pk topic.pk %}">{{topic.subject}}</a> are you reporting?</h3>
+        </div> 
+        <div class="col-lg-6 col-sm-12 mt-5">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+          
+            <div class="card">
+              <div class="card-body">
+                <h4 class="mb-4 text-danger">Report topic</h4>
+                {% include 'includes/form.html' %}
+                <small class="text-muted">Please provide any additional information or context that help us understand and handle this situation.</small>
+              </div>
+
+            </div>              
+            <div class="card mt-3">
+              <div class="card-body">
+                <button type="submit" class="btn btn-outline-danger" style="width: 100%;">Report</button>
+              </div>
+            </div>
+          </form> 
+      </div>
+    </div>  
+    {%endif%}
+    
+
+
+    {%endblock%}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+    {%block title%}{{ topic.subject }} - DV Thoughts{%endblock%}
+<body>
+  {% block body %}
+  <div>
+      <ol class="breadcrumb my-4 shadow p-3 mb-5 bg-white rounded animate__animated animate__flash">
+      {%block breadcrumb%}
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Boards</a></li>
+      <li class="breadcrumb-item active"><a href="{% url 'board_topics' topic.board.pk %}">{{ topic.board.name }}</a></li>
+      <li class="breadcrumb-item active over">{{ topic.subject }}</li>
+      </ol>
+
+
+      
+  </div>
+
+{%endblock%}
+
+{% endblock %}
+
+{%block content%}
+
+
+<a id="button"><i class="fas fa-chevron-up" style="margin-top: 11px; font-size: 29px; color:white"></i></a>
+
+
+<div class="row">
+
+<!--Start topic and content of topic-->
+
+
+
+
+
+
+    <div class="col-lg-8 col-sm-12 full-img-width">
+
+
+      <div class="card shadow p-0 mb-2 bg-white rounded">
+        {% if topic.topic_picture %}
+        <img src="{{ topic.topic_picture.url }}"
+        class="avatar" style="width: 100%;">
+        {%endif%}
+
+        <div class="card-body">
+          <h4 class="font-weight-bold text-primary"> {{ topic.subject }}</h4>
+          <span class="text-muted">{{ topic.created_date }}</span>・
+          {% if topic.time %}
+          <span class="text-muted">{{ topic.time }} min read</span>・
+          {% endif %}
+          <span class="text-muted">Viewed {{ topic.views }} times</span> 
+          {% if topic.created_by.author.facebook %}
+          ・ <span class="text-muted">Connect with {{ topic.created_by.username }}
+            <a href="{{ topic.created_by.author.facebook }}" style="text-decoration:none" target="_blank">
+              <i class="fab fa-facebook ml-1" style="font-size: 20px;"></i>
+            </a>
+          </span>
+          {% endif %}
+          {% if topic.created_by.author.github %}
+          <span class="text-muted">
+            <a href="{{ topic.created_by.author.github }}" style="text-decoration:none" target="_blank">
+              <i class="fab fa-github ml-1" style="font-size: 20px;"></i>
+            </a>
+          </span> 
+          {% endif %}
+          <span style="display: block;">    
+            {% for mt in topic_tags %}
+            <a href="{% url 'filter_topics' board.pk mt.pk %}" class="badge badge-primary p-1 mt-1 mb-0">#{{ mt }}</a>
+            {% endfor %}
+          </span>
+
+          {% if request.user.is_authenticated %}
+          <form action="{% url 'like_topic' board.pk topic.pk %}"  method="POST" class="form-inline like-form mt-2 mb-0" id="{{ topic.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="topic_id" value="{{ topic.id }}">
+            <button class="btn btn-outline-primary like-btn{{topic.id}}">
+              {% if request.user not in topic.liked.all %}
+              like
+              {% else %}
+              Unlike
+              {% endif %}
+            </button>
+
+            <div class="">
+              <div class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <div class="ml-1 like-hvr" style="cursor: pointer;">
+                  <strong class="like-count{{topic.id}} font-weight-light">{{ topic.liked.all.count }}</strong>
+                  <strong class="font-weight-light">likes</strong>
+                </div>
+              </div>
+              <div class="dropdown-menu dropdown-menu-right">
+                {% if topic.liked.all %}
+                  {% for like in topic.liked.all %}
+                  <a class="dropdown-item dropdown-item-white"  href="{% url 'user_profile' like.pk %}">
+                    {% if like.author.picture %}
+                    <img src="{{ like.author.picture.url }}"
+                    class="rounded-circle"
+                    width="35px"
+                    height="35px"
+                    alt=""
+                    loading="lazy"
+                    >
+                    {%else%}
+                    <img src="{% static 'images/profile.png' %}"
+                    class="rounded-circle"
+                    width="35px"
+                    height="35px"
+                    alt=""
+                    loading="lazy"
+                    >
+                    {% endif %}  
+                    
+                    {% if like == request.user %}
+                     You 
+                    {% else %}
+                    {{like}}
+                    {% endif %}
+                  </a>
+                  {% endfor %}
+                {% else %}
+                  <a class="dropdown-item dropdown-item-white">0 Likes!</a>
+                {% endif %}  
+              </div>
+            </div>
+          </form>
+          {% endif %}             
+
+        </div>
+      </div>
+      <div class="card mb-3 shadow p-0 mb-0 rounded">
+
+
+        <div class="card-header forum-card-img-30 d-flex justify-content-between bg-white" >
+          <div class="pt-0 mb-0">
+            <a href="#" style="text-decoration: none;">
+              {% if topic.created_by.author.picture %}
+              <img src="{{ topic.created_by.author.picture.url }}"
+              class="rounded-circle avatar" height="45" width="45" >
+              
+              {%else%}
+              <img src="{% static 'images/profile.png' %}"
+              class="rounded-circle avatar" height="45" width="45" >
+              
+              {% endif %}
+            </a>
+              <span class="text-muted ml-2"><a href="{% url 'user_profile' topic.created_by.id %}">{{ topic.created_by }}</a></span>
+              <span class="badge badge-secondary font-italic ml-2"> Author </span>
+          </div>
+
+          <div class="float-right">
+            <span class="mt-2 pr-2 text-muted"><i class="fas fa-globe-americas"></i> {{ topic.created_date }}</span>
+          </div>
+        </div>
+        
+        <div class="card-body images">
+            <p>{{ topic.content|safe }}</p>
+        </div>
+      </div>
+
+        <!--End topic and content of topic-->
+
+
+
+        <!--Start commenting -->
+
+
+
+        <div class="card shadow p-0 mb-5 bg-white rounded">
+          <div class="card-body">
+            <h3>Comments ({{ topic.post.all.count }}) </h3>
+            {% if request.user.is_authenticated %}
+            <form  method="post">
+              {%csrf_token%}
+              <span>
+                {% include 'includes/form.html' %}
+              <button type="submit" class="btn btn-primary mt-1">Submit</button>
+            </form>
+            {% else %}
+            <div class="alert alert-warning mt-5" role="alert">
+              <a class="btn btn-outline-success " href="{% url 'signup' %}">Sign Up</a>
+              <span> to join this conversation on DV Thoughts. Already have an account? <a href="{% url 'login' %}">Sign in to comment</a></span>    
+            </div>
+            {% endif %}
+
+
+
+
+
+            {% for post in topic.post.all %}
+                              <!-- Modal -->
+            <div class="modal fade" id="p-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark-modal">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure to delete your comment ?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Deleting your comment ? 
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a type="button" href="{% url 'delete_comment' topic.board.pk topic.pk post.pk %}" class="btn btn-danger">Delete</a>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <div class="card mb-3 p-0 mb-0 mt-2 rounded border-card">
+      
+              <div class="card-header forum-card-img-30 d-flex justify-content-between bg-white" style="border:none;">
+                <div class="pt-0 mb-0">
+                  <a href="{% url 'user_profile'  post.created_by.id %}" style="text-decoration: none;">
+                    {% if post.created_by.author.picture %}
+                    <img src="{{ post.created_by.author.picture.url }}"
+                    class="rounded-circle avatar" height="40" width="40">
+                    
+                    {%else%}
+                    <img src="{% static 'images/profile.png' %}"
+                    class="rounded-circle avatar" height="40" width="40">
+                    
+                    {% endif %}
+                  </a>
+                    <span class="text-muted ml-2"> <a href="{% url 'user_profile'  post.created_by.id %}">{{ post.created_by }}</a></span> 
+                    {% if post.edit_date %}
+                      <span class="badge badge-warning font-italic ml-2">Edited {{ post.edit_date }}</span>
+                    {% endif %}
+                    {% if post.created_by == topic.created_by %}
+                    <span class="badge badge-secondary font-italic ml-2"> Author </span>
+                    {% endif %}
+
+      
+                </div>
+      
+                <div class="float-right">
+                  <span class="mt-2 pr-2 text-muted"><i class="fas fa-globe-americas"></i> {{ post.created_date }}</span>
+                  {% if post.created_by == request.user %}
+                  <div class="dropdown" style="display: inline-block;">
+                    <ul class="navbar-nav ml-auto">
+                       <li class="nav-item dropdown">
+                        <a class="nav-link dropdown text-dark" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class=""><i class="fas fa-ellipsis-h"></i></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                          <a class="dropdown-item dropdown-item-white" href="{% url 'edit_comment' topic.board.pk topic.pk post.pk %}"><i class="far fa-edit"></i> Edit comment</a>
+                          <button type="button" class="dropdown-item dropdown-item-white" data-toggle="modal" data-target="#p-{{post.pk}}">
+                            <i class="fas fa-trash"></i> Move to trash
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                 </div>
+                 {% endif %}   
+                </div>
+              </div>
+              
+              <div class="card-body pl-4 pt-1 pb-0">
+                  <p>{{ post.message }}</p>
+              </div>
+      
+            </div>
+              {% endfor %}
+
+
+
+
+
+
+
+          </div>
+        </div>
+
+
+        
+      </div> 
+
+      <div class="col-lg-4 col-sm-12" >
+        <div  class="shadow card shadow" style="height: fit-content;">
+        <div class="list-group">
+          <h3 class="text-muted text-center pb-1 font-weight-light">Related Topics</h3>
+          {% if related_topics %}
+          {% for related_topic in related_topics %}
+          <a href="{% url 'filter_topic_content' board.pk related_topic.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1 text-primary list-item-head">{{ related_topic.subject }}</h5>
+            </div>
+            <div style="display: inline-grid;">
+              <small class="text-muted">{{related_topic.created_by}} - {{ related_topic.created_date}}</small>
+              <small class="text-muted">  
+                {% for tag in related_topic.tags.all %}
+                  #{{ tag }}
+                {% endfor %}
+              </small>
+
+            </div>
+
+          </a>
+          {% endfor %}
+          {% else %}
+          <p class="text-center alert alert-danger">Not Found Related Topics.</p>
+          {% endif %}
+        </div>      
+        </div>
+
+
+        <div  class="mt-5 shadow card shadow" style="height: fit-content;">
+          <div class="list-group">
+            <h3 class="text-muted text-center pb-1 font-weight-light">more topics from <a href="{% url 'user_profile' topic_owner.id %}">{{topic_owner}}</a></h3>
+            {% if more_topics_from_owner %}
+            {% for topic in more_topics_from_owner %}
+            <a href="{% url 'filter_topic_content' board.pk topic.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 text-primary list-item-head">{{ topic.subject }}</h5>
+              </div>
+              <small class="text-muted">  
+                {% for tag in topic.tags.all %}
+                  #{{ tag }}
+                {% endfor %}
+              </small>
+            </a>
+            {% endfor %}
+            {% else %}
+            <p class="text-center alert alert-danger">Not Found More Topics.</p>
+            {% endif %}
+
+          </div>       
+          </div>
+
+
+
+
+
+
+
+
+
+        
+        <div class="p-2 mt-5 card shadow" style="height: fit-content;">
+          <div class="card-head">
+            <h3 class="text-muted text-center font-weight-light">Trending on <a href="{% url 'board_topics' board.pk %}" title="{{board.name}}" class="" style="text-decoration:none"></a>{{board.name}}</h3>
+          </div>
+          <div class="card-body text-center">
+            {% for mt in common_tags %}
+            <a href="{% url 'filter_topics' board.pk mt.pk %}" class="btn btn-outline-primary bdge m-1 shadow">#{{mt}}</a>
+            {% endfor %}
+          </div>
+        </div>
+      
+
+
+      </div>
+
+
+
+
+
+      
+</div>
+
+
+
+
+
+</div>
+
+ 
+<script src="{%static 'js/like-btn.js'%}"></script>
+<script src="{%static 'js/btn-top.js'%}"></script>
+{%endblock%}
+
+
+
+
+</body>
+</html>

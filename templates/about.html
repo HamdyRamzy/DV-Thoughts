@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {%block title%}About - DV Thoughts{%endblock%}
+
+<body>
+  {% block body %}
+
+  {% endblock %}  
+    
+  
+  
+    {%block content%}
+    <div class="mt-5">
+      <div class="card shadow p-5" >
+        <div class="card-body pt-0">
+        </div>
+        <h4 class="text-center">About <a href="{% url 'home' %}"><span style="color: rgb(240,133,255);">D</span><span style="color: rgb(213,145,255);">V</span> <span style="color: rgb(67,207,255);">Thoughts</span></a></h4>
+        <p class="text-center">
+          DV Thoughts aims at providing the highest quality articles on {% for board in boards %}
+           <a  href="{% url 'board_topics' board.pk %}">{{board.name}} </a>
+           {%if not forloop.last%}
+           ,
+           {% endif %}
+           {% endfor %} Coding and Blogging. Our primary goal is to provide helpful, in-depth guides on various problems that webmasters may face while managing their websites.
+         </p>
+         
+         <h4 class="text-center mt-2">The Founder</h4>
+        
+          {% if owner.photo %}
+          <img src="{{ owner.photo.url }} " class="rounded-circle mx-auto d-block " height="90" width="90">
+          {%else%}
+          <img src="{% static 'images/profile.png' %}" class="rounded-circle mx-auto d-block " height="90" width="90">
+          {% endif %}
+          <div class="text-center">
+            <h4 class="font-weight-light mt-3"><a href="{% url 'user_profile' owner.pk %}">{{owner.name}}</a></h4>
+            <p class="text-muted">{{owner.bio}}</p>
+              <div class="" style="font-size: 25px;">
+                  <a href="{{ owner.facebook }}"  target="_blank"><i class="fab fa-facebook"></i></a>
+                  <a href="{{ owner.github }}"  target="_blank"><i class="fab fa-github ml-2"></i></a>  
+                  <a href="{{ owner.linkedin }}"  target="_blank"><i class="fab fa-linkedin ml-2"></i></a>  
+               </div>  
+          </div>
+
+
+
+        </div>
+      </div>     
+      
+      
+    {%endblock%}          
+    </div>
+  </div> 
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

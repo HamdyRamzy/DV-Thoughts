@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+    {%block title%}View reported topic - {{ topic }}{%endblock%}
+
+
+{%block content%}
+<div class="mt-5">
+  <div class="row">
+    <div class="col-lg-1">
+      <img src="{% static 'images/warning.png' %}" class="fas fa-thumbs-up text-primary" height="70" width="70">
+    </div>
+    <div class="col-lg-11">
+      
+      <h3 class="text-muted font-weight-light" >Your topic goes against our community standards on spam </h3>
+      <h3 class="text-muted font-weight-light">No one can see your topic <span class="text-danger">{{topic.subject}}</span> .</h3>
+
+    </div>
+
+  </div>
+
+ 
+    
+    
+</div> 
+
+
+<div class="row">
+
+    <div class="col-lg-8 col-sm-12">
+        <div class="card mt-5 shadow" style="opacity: 0.5; border: solid 1px red;">
+            
+            <div class="card-header forum-card-img-30 d-flex justify-content-between bg-white" >
+                <div class="pt-0 mb-0">
+                  <a href="#" style="text-decoration: none;">
+                    {% if topic.created_by.author.picture %}
+                    <img src="{{ topic.created_by.author.picture.url }}"
+                    class="rounded-circle avatar" height="45" width="45" >
+                    
+                    {%else%}
+                    <img src="{% static 'images/profile.png' %}"
+                    class="rounded-circle avatar" height="45" width="45" >
+                    
+                    {% endif %}
+                  </a>
+                    <span class="text-muted ml-2"><a href="{% url 'user_profile' topic.created_by.id %}">{{ topic.created_by }}</a></span>
+                    <span class="badge badge-secondary font-italic ml-2"> Author </span>
+                </div>
+      
+                <div class="float-right">
+                  <span class="mt-2 pr-2 text-muted"><i class="fas fa-globe-americas"></i> {{ topic.created_date }}</span>
+                </div>
+              </div>
+              
+              <div class="card-body images">
+                  <p>{{ topic.content|safe }}</p>
+              </div>
+            </div>
+        
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+{% endblock %}
