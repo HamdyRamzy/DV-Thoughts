@@ -231,7 +231,7 @@ class Post(models.Model):
     created_date = models.DateField(auto_now_add=True) 
     edit_date = models.DateField(null=True)
         
-        
+    
     def add_comment_notification(self, sender, topic):
         notify = Notification.objects.create(topic=topic, sender=sender, user=topic.created_by, notification_type=2)
 

@@ -447,8 +447,10 @@ def topic_content(request, board_id, topic_id):
             post.created_by = request.user
             post.topic = topic
             sender = request.user
-            post.add_comment_notification(sender, topic)
+            if sender != topic.created_by: 
+                post.add_comment_notification(sender, topic)
             post.save()
+
             return redirect('topic_content', board_id=topic.board.pk, topic_id=topic.pk )
 
 
@@ -490,8 +492,9 @@ def like_topic(request, board_id, topic_id):
         topic_object.liked.add(request.user)
 
     like, created = Like.objects.get_or_create(user=request.user, topic=topic_object)
-    sender = like.user 
-    like.add_like_notification(sender, topic)
+    sender = like.user
+    if sender != topic.created_by: 
+        like.add_like_notification(sender, topic)
    
 
     if not created:
@@ -537,7 +540,8 @@ def filter_topic_content(request, board_id, topic_id):
             post.created_by = request.user
             post.topic = topic
             sender = request.user
-            post.add_comment_notification(sender, topic)
+            if sender != topic.created_by: 
+                post.add_comment_notification(sender, topic)
             post.save()
             return redirect('topic_content', board_id=topic.board.pk, topic_id=topic.pk )
         
