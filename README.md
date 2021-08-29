@@ -1,10 +1,10 @@
-Hi!
+#Hi!
 
-Welcome to Hamdy's CS50 Final Project - "DV Thought!".
+#Welcome to Hamdy's CS50 Final Project - "DV Thought!".
 
 https://www.youtube.com/
 
-Description of CS50 final project :
+#Description of CS50 final project :
 
 My final project is a Blog application.
 DV Thought! aims at providing the highest quality articles on CS50 course, Web Development, Mobile Development, and other boards Coding, and Blogging. Our primary goal is to provide helpful, in-depth guides on various problems that webmasters may face while managing their websites.
