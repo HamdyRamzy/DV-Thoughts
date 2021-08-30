@@ -23,28 +23,28 @@ Tools I used for CS50 final project:
 
 DV Thoughts has features for users like:
 
-1- Add, delete and edit topics.
-2- Users can like topics and comment on them.
-3- Users can add, delete and edit comments.
-4- Notification system for likes, comments, and reports.
-5- Badges system.
-6- Tags system.
-7- Filter topics by tags. 
-8- Trending tags in the blog.
-9- Related topics.
-10- More topics from users who publish topics.
-11- Search for topics and users in the blog.
-12- Profile for each user.
-13- User can edit her profile and settings.
-14- Light and dark mode.
-15- Users can report topics.
-16- Users can report users.
+- Add, delete and edit topics.
+- Users can like topics and comment on them.
+- Users can add, delete and edit comments.
+- Notification system for likes, comments, and reports.
+- Badges system.
+- Tags system.
+- Filter topics by tags. 
+- Trending tags in the blog.
+- Related topics.
+- More topics from users who publish topics.
+- Search for topics and users in the blog.
+- Profile for each user.
+- User can edit her profile and settings.
+- Light and dark mode.
+- Users can report topics.
+- Users can report users.
 
 DV Thoughts has features for admin like :
 
-1- Admin can Add, delete and edit badges.
-2- Admin can Add, delete and edit boards.
-3- Admin can Block reported topics after check.
-4- Admin can Block reported users after check.
+- Admin can Add, delete and edit badges.
+- Admin can Add, delete and edit boards.
+- Admin can Block reported topics after check.
+- Admin can Block reported users after check.
 
 This is all about my final project, hope you enjoy it!.
