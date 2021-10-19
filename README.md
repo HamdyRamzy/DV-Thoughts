@@ -1,4 +1,4 @@
-Hi!
+Hi!!
 
 Welcome to Hamdy's CS50 Final Project - "DV Thought!".
 
